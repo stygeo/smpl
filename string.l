@@ -42,6 +42,7 @@ WSPACE   [ \t]+
 "=="      {return EQUAL;}
 "+"       {return CONCAT;}
 ";"       {return END_STMT;}
+"\n"      {return END_STMT;}
 "("       {return OPEN_PAR;}
 ")"       {return CLOSE_PAR;}
 "{"       {return BEGIN_CS;}

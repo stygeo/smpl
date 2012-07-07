@@ -1,7 +1,8 @@
 #include <stdio.h>
 #include <iostream.h>
+#include <stdarg.h>
 #include "lex.h"
-#include "lexsymb.h"
+#include "parse.h"
 
 char *name[] = {
   "IF", "ELSE", "PRINT", "INPUT", "ASSIGN", "EQUAL",
