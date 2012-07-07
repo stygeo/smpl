@@ -4,13 +4,25 @@
 #include "lex.h"
 #include "parse.h"
 
-char *name[] = {
-  "IF", "ELSE", "PRINT", "INPUT", "ASSIGN", "EQUAL",
-  "CONCAT", "END_STMT", "OPEN_PAR", "CLOSE_PAR", "BEGIN_CS", "END_CS",
-  "ID", "STRING",
-};
+int errors = 0;
+void error(char *format, ...) {
+  va_list args;
 
-YYSTYPE yylval; // Union in which strings are passed.
+  errors++;
+  printf("Line: %d: ", lineno);
+  va_start(args, format);
+  vfprintf(stdout, format, args);
+  va_end(args);
+  printf("\n");
+}
+
+void error_summary() {
+  printf("%d error(s) were found.\n", errors);
+}
+
+void yyerror(char *msg) {
+  error(msg);
+}
 
 // This function is called by the lexer when the end-of-file
 // is reached; you can reset yyin (the input FILE*) and return 0
@@ -21,29 +33,14 @@ extern "C" int yywrap(void) {
 
 using namespace std;
 int main(int argc, char *argv[]) {
-  int token;
-
   yyin = NULL;
-  if(argc == 2) {
+  if(argc == 2)
     yyin = fopen(argv[1], "rt");
-  }
   if(yyin == NULL)
     yyin = stdin;
 
-  while((token = yylex()) != 0) {
-    cout << "Token: ";
-    switch(token) {
-      case ID:
-        cout << name[token-IF] << " = " << yylval.str << endl;
-        delete [] yylval.str;
-        break;
-      case ERROR_TOKEN:
-        cout << "Error parsing: " << token << endl;
-        break;
-      default:
-        cout << name[token-IF] << endl;
-        break;
-    }
-  }
-  return 0;
+  yyparse();
+  error_summary();
+
+  return errors ? 1 : 0;
 }

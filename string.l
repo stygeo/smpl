@@ -7,7 +7,7 @@
 
 #define _LEX_CPP_
 #include "lex.h"
-#include "lexsymb.h"
+#include "parser.hpp"
 
 extern "C" int yywrap(); // Declare yywrap
 
@@ -42,19 +42,18 @@ WSPACE   [ \t]+
 "=="      {return EQUAL;}
 "+"       {return CONCAT;}
 ";"       {return END_STMT;}
-"\n"      {return END_STMT;}
 "("       {return OPEN_PAR;}
 ")"       {return CLOSE_PAR;}
 "{"       {return BEGIN_CS;}
 "}"       {return END_CS;}
-{IDENT}   {identifier();
+{IDENT}   {identifier();       /* identifier: copy name */
+          return ID;}
+{STR}     {string_constant();  /* string constant: copy contents */
           return STRING;}
-{STR}     {string_constant();
-          return STRING;}
-"//"      {eat_comment();}
-\n        {lineno++;}
-{WSPACE}  {}
-.         {return ERROR_TOKEN;}
+"//"      {eat_comment();}     /* Comment:     skip */
+\n        {lineno++;}          /* newline:     count lines */
+{WSPACE}  {}                    /* whitespace: (do nothing) */
+.         {return ERROR_TOKEN;} /* other char: error, illigal token */
 
 %%
 

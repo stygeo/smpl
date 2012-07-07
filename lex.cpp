@@ -360,8 +360,8 @@ static void yy_fatal_error (yyconst char msg[]  );
 	*yy_cp = '\0'; \
 	(yy_c_buf_p) = yy_cp;
 
-#define YY_NUM_RULES 20
-#define YY_END_OF_BUFFER 21
+#define YY_NUM_RULES 19
+#define YY_END_OF_BUFFER 20
 /* This struct is not used in this scanner,
    but its presence is necessary. */
 struct yy_trans_info
@@ -371,10 +371,10 @@ struct yy_trans_info
 	};
 static yyconst flex_int16_t yy_accept[39] =
     {   0,
-        0,    0,   21,   19,   18,    9,   19,   10,   11,    7,
-       19,    8,    5,   14,   14,   14,   14,   12,   13,   18,
-        0,   15,   16,    6,   14,   14,    1,   14,   14,   14,
-       14,   14,    2,   14,   14,    4,    3,    0
+        0,    0,   20,   18,   17,   16,   18,    9,   10,    7,
+       18,    8,    5,   13,   13,   13,   13,   11,   12,   17,
+        0,   14,   15,    6,   13,   13,    1,   13,   13,   13,
+       13,   13,    2,   13,   13,    4,    3,    0
     } ;
 
 static yyconst flex_int32_t yy_ec[256] =
@@ -480,7 +480,7 @@ char *yytext;
 
 #define _LEX_CPP_
 #include "lex.h"
-#include "lexsymb.h"
+#include "parser.hpp"
 
 extern "C" int yywrap(); // Declare yywrap
 
@@ -804,71 +804,65 @@ YY_RULE_SETUP
 {return END_STMT;}
 	YY_BREAK
 case 9:
-/* rule 9 can match eol */
 YY_RULE_SETUP
 #line 45 "string.l"
-{return END_STMT;}
+{return OPEN_PAR;}
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
 #line 46 "string.l"
-{return OPEN_PAR;}
+{return CLOSE_PAR;}
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
 #line 47 "string.l"
-{return CLOSE_PAR;}
+{return BEGIN_CS;}
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
 #line 48 "string.l"
-{return BEGIN_CS;}
+{return END_CS;}
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
 #line 49 "string.l"
-{return END_CS;}
+{identifier();
+          return ID;}
 	YY_BREAK
 case 14:
+/* rule 14 can match eol */
 YY_RULE_SETUP
-#line 50 "string.l"
-{identifier();
-          return STRING;}
-	YY_BREAK
-case 15:
-/* rule 15 can match eol */
-YY_RULE_SETUP
-#line 52 "string.l"
+#line 51 "string.l"
 {string_constant();
           return STRING;}
 	YY_BREAK
-case 16:
+case 15:
 YY_RULE_SETUP
-#line 54 "string.l"
+#line 53 "string.l"
 {eat_comment();}
 	YY_BREAK
+case 16:
+/* rule 16 can match eol */
+YY_RULE_SETUP
+#line 54 "string.l"
+{lineno++;}
+	YY_BREAK
 case 17:
-/* rule 17 can match eol */
 YY_RULE_SETUP
 #line 55 "string.l"
-{lineno++;}
+{}
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
 #line 56 "string.l"
-{}
+{return ERROR_TOKEN;}
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 57 "string.l"
-{return ERROR_TOKEN;}
-	YY_BREAK
-case 20:
-YY_RULE_SETUP
-#line 59 "string.l"
+#line 58 "string.l"
 ECHO;
 	YY_BREAK
-#line 872 "lex.cpp"
+#line 866 "lex.cpp"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1866,7 +1860,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 59 "string.l"
+#line 58 "string.l"
 
 
 

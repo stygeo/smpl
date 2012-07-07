@@ -3,14 +3,13 @@
 %{
 
 // Includes
-#include <malloc.h>
 #include <string.h>
 
 #include "lex.h"
 
 // Yacc (bison) defines
 #define YYDEBUG 1       // Generate debug code; needed for YYERROR_VERBOSE
-#define YYDEBUG_VERBOSE // Give more specific parse error messages
+#define YYERROR_VERBOSE // Give more specific parse error messages
 
 // Error-reporting function must be defined by the caller
 void error(char *format, ...);
@@ -41,7 +40,7 @@ void yyerror(char *msg);
    Yacc grammer rules
    -----------------------------------*/
 
-progam
+program
       : statement_list
     ;
 
@@ -54,7 +53,7 @@ statement
       : END_STMT                    { puts("Empty statement"); }
       | expression END_STMT         { puts("Expression statement"); }
       | PRINT expression END_STMT   { puts("Print statement"); }
-      | INPUT expression END_STMT   { puts("Input statement"); }
+      | INPUT identifier END_STMT   { puts("Input statement"); }
       | if_statement                { puts("If statement"); }
       | compound_statement          { puts("Compound statement"); }
       | error END_STMT              { puts("Error statement"); }
@@ -80,7 +79,7 @@ expression
 
 equal_expression
       : expression EQUAL assign_expression
-      | concat_expression
+      | assign_expression
       ;
 
 assign_expression
