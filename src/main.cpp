@@ -5,6 +5,8 @@
 #include "parse.h"
 #include "symtab.h"
 #include "syntree.h"
+#include "intcode.h"
+#include "vm.h"
 
 int errors = 0;
 void error(char *format, ...) {
@@ -36,6 +38,8 @@ extern "C" int yywrap(void) {
 extern SymTab st;
 extern SyntTree tree;
 
+IntInstr *intcode;
+
 using namespace std;
 int main(int argc, char *argv[]) {
   yyin = NULL;
@@ -47,8 +51,15 @@ int main(int argc, char *argv[]) {
   yyparse();
   error_summary();
 
-  st.show();
-  tree->show();
+  //st.show();
+  //tree->show();
+  intcode = gen_int_code(tree);
+  intcode->number(1);
+  intcode->show();
+
+  VMachine vm;
+  vm.read();
+  vm.execute();
 
   return errors ? 1 : 0;
 }

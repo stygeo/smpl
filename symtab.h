@@ -1,3 +1,5 @@
+#pragma once
+
 #include <iostream.h>
 #include <string.h>
 

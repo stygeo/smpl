@@ -1,4 +1,5 @@
-a = "test";
+test = true;
+a = "test: " + test;
 if(a == "test")
   print "Hello";
 
