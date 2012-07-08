@@ -11,3 +11,6 @@
 *.la
 *.a
 .*.un~
+
+# Debug objects
+*.dSYM
