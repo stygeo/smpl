@@ -37,12 +37,12 @@ char *make_name();
 /* Token definitions */
 %token ERROR_TOKEN IF ELSE PRINT INPUT ASSIGN EQUAL
 %token CONCAT END_STMT OPEN_PAR CLOSE_PAR
-%token BEGIN_CS END_CS 
+%token BEGIN_CS END_CS DEF THEN END
 %token <str> ID STRING
 
 /* Rule type definitions */
 %type <symbol> identifier string
-%type <tnode>  program statement_list statement
+%type <tnode>  program statement_list statement function_definition
 %type <tnode>  if_statement optional_else_statement compound_statement
 %type <tnode>  expression equal_expression assign_expression
 %type <tnode>  concat_expression simple_expression
@@ -70,9 +70,14 @@ statement
       | expression END_STMT         {$$ = new TreeNode(EXPR_STMT, $1);}
       | PRINT expression END_STMT   {$$ = new TreeNode(PRINT_STMT, $2);}
       | INPUT identifier END_STMT   {$$ = new TreeNode(INPUT_STMT); $$->symbol = $2;}
+      | function_definition         {$$ = new TreeNode(EMPTY_STMT);}
       | if_statement                {$$ = $1;}
       | compound_statement          {$$ = $1;}
       | error END_STMT              {$$ = new TreeNode(ERROR_STMT);}
+      ;
+function_definition
+      : DEF identifier OPEN_PAR CLOSE_PAR statement
+        {}
       ;
 
 /* NOTE: This rule causes an unresolvable shift/reduce conflict;

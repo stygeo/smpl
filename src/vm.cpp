@@ -23,30 +23,76 @@ void VMachine::reset() {
   stack.empty();
 }
 
-// Read a program from stdin
-// (hardwired for testing purposes)
-void VMachine::read()   {
-   str[0] = new String("Answer to the Ultimate Question"
-      " of Life, the Universe and Everything > ");
-   str[1] = new String;
-   str[2] = new String("42");
-   str[3] = new String("Right!\n");
-   str[4] = new String("Wrong!\n");
+extern SymTab st;
+extern IntInstr *intcode;
 
-   // A very simple program for testing purposes
-   ninstr = 11;
-   instr = new Instr[ninstr];
-   instr[0] = Instr (OP_PUSH,  0);   // print "...";
-   instr[1] = Instr (OP_PRINT);
-   instr[2] = Instr (OP_INPUT, 1);   // input answer;
-   instr[3] = Instr (OP_PUSH,  1);   // if (answer == "42")
-   instr[4] = Instr (OP_PUSH,  2);
-   instr[5] = Instr (OP_STR_EQUAL);
-   instr[6] = Instr (OP_JMPF,  3);
-   instr[7] = Instr (OP_PUSH,  3);   //      print "Right!\n";
-   instr[8] = Instr (OP_JMP,   2);
-   instr[9] = Instr (OP_PUSH,  4);   // else print "Wrong!\n";
-   instr[10]= Instr (OP_PRINT);
+// Read a program
+// TODO: Disc from compiler
+void VMachine::read()   {
+  int i = 0;
+
+  SymDesc *s = st.get_first();
+  while(s != NULL) {
+    // Content not empty, string constant
+    if(s->cont != NULL) {
+      str[i] = new String(s->cont);
+    } else { // Boolean
+      str[i] = new String();
+    }
+    // Set the number so we can find it back (TODO, don't use indices,
+    // but pointers instead.
+    s->set_no(i);
+    i++;
+    s = st.get_next();
+  }
+
+  ninstr = intcode->len();
+  instr  = new Instr[ninstr];
+  IntInstr *cinstr = intcode;
+  for(i = 0; i < ninstr; i++) {
+    switch(cinstr->opcode) {
+      case OP_NOP:              // No operation
+        instr[i] = Instr(OP_NOP, 0);
+        break;
+      case OP_PUSH:             // push string [var]
+        instr[i] = Instr(OP_PUSH, cinstr->str->get_no());
+        break;
+      case OP_GETTOP:           // get string from top of stack (=assign) [var]
+        instr[i] = Instr(OP_GETTOP, cinstr->str->get_no());
+        break;
+      case OP_DISCARD:          // discard top value from the stack
+        instr[i] = Instr(OP_DISCARD);
+        break;
+      case OP_PRINT:            // print a string
+        instr[i] = Instr(OP_PRINT);
+        break;
+      case OP_INPUT:            // input a string [var]
+        instr[i] = Instr(OP_INPUT, cinstr->str->get_no());
+        break;
+      case OP_JMP:              // unconditional jump [dest]
+        instr[i] = Instr(OP_JMP, cinstr->target->n - i);
+        break;
+      case OP_JMPF:             // jump if false [dest]
+        instr[i] = Instr(OP_JMPF, cinstr->target->n - i);
+        break;
+      case OP_STR_EQUAL:        // test whether two strings are equal
+        instr[i] = Instr(OP_STR_EQUAL);
+        break;
+      case OP_BOOL_EQUAL:       // test whether two bools are equal
+        instr[i] = Instr(OP_BOOL_EQUAL);
+        break;
+      case OP_CONCAT:           // concatinate two strings
+        instr[i] = Instr(OP_CONCAT);
+        break;
+      case OP_BOOL2STR:
+        instr[i] = Instr(OP_BOOL2STR);
+        break;
+      case JUMPTARGET:
+        instr[i] = Instr(OP_NOP);
+        break;
+    }
+    cinstr = cinstr->next;
+  }
 }
 
 void VMachine::execute ()   {

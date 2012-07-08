@@ -29,6 +29,7 @@ public:
    IntInstr (Opcode _opcode, SymDesc *_str)   {opcode = _opcode; str = _str; next=NULL; target=NULL;}
    void show ();
    void number (int ln); // number the lines of this code block
+   int len();
 
    int       n;         // line number
    Opcode    opcode;    // the opcode

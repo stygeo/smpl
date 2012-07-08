@@ -52,8 +52,11 @@
      CLOSE_PAR = 268,
      BEGIN_CS = 269,
      END_CS = 270,
-     ID = 271,
-     STRING = 272
+     DEF = 271,
+     THEN = 272,
+     END = 273,
+     ID = 274,
+     STRING = 275
    };
 #endif
 /* Tokens.  */
@@ -70,8 +73,11 @@
 #define CLOSE_PAR 268
 #define BEGIN_CS 269
 #define END_CS 270
-#define ID 271
-#define STRING 272
+#define DEF 271
+#define THEN 272
+#define END 273
+#define ID 274
+#define STRING 275
 
 
 
@@ -85,7 +91,7 @@ typedef union YYSTYPE
   TreeNode *tnode;   // node in the syntax tree
 }
 /* Line 1529 of yacc.c.  */
-#line 89 "src/parser.hpp"
+#line 95 "src/parser.hpp"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1

@@ -40,8 +40,9 @@ extern SyntTree tree;
 
 IntInstr *intcode;
 
-using namespace std;
 int main(int argc, char *argv[]) {
+  bool debug = true;
+
   yyin = NULL;
   if(argc == 2)
     yyin = fopen(argv[1], "rt");
@@ -51,15 +52,23 @@ int main(int argc, char *argv[]) {
   yyparse();
   error_summary();
 
-  //st.show();
-  //tree->show();
-  intcode = gen_int_code(tree);
-  intcode->number(1);
-  intcode->show();
+  if(debug) {
+    st.show();
+    tree->show();
+  }
 
-  VMachine vm;
-  vm.read();
-  vm.execute();
+  if(!errors) {
+    intcode = gen_int_code(tree);
+    intcode->number(1);
 
-  return errors ? 1 : 0;
+    if(debug) intcode->show();
+
+    VMachine vm;
+    vm.read();
+    vm.execute();
+
+    return 0;
+  }
+
+  return 1;
 }

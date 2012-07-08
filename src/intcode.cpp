@@ -11,6 +11,12 @@ void IntInstr::number(int ln)   {
    }
 }
 
+int IntInstr::len() {
+  IntInstr *i = next; int cnt = 1;
+  while(i != NULL) { cnt++; i=i->next; }
+  return cnt;;
+}
+
 // Names of the opcodes
 char *op_name[] = {
    "OP_NOP", "OP_PUSH", "OP_GETTOP", "OP_DISCARD",

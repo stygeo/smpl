@@ -1,6 +1,19 @@
-test = true;
-a = "test: " + test;
-if(a == "test")
-  print "Hello";
+def test() then
+end
 
-a = "test";
+print "Please state your name: ";
+input answer;
+print "Ah, welcome Mr. " + answer;
+
+if(answer) then
+  print "Since you stated your name, would you like to continue
+  answering some questions? (y/n): ";
+  input cont;
+  if(cont == "y") {
+    print "Good. How old are you? ";
+    input age;
+    print age + " is not so old. Very well. I know enough now. good bye";
+  } else {
+    print "Ok, I'll quit then";
+  }
+end

@@ -42,6 +42,9 @@ WSPACE   [ \t]+
 "else"    {return ELSE;}
 "print"   {return PRINT;}
 "input"   {return INPUT;}
+"def"     {return DEF;}
+"then"    {return BEGIN_CS;}
+"end"     {return END_CS;}
 "="       {return ASSIGN;}
 "=="      {return EQUAL;}
 "+"       {return CONCAT;}

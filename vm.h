@@ -2,6 +2,7 @@
 
 #include "stack.h"
 #include "sstring.h"
+#include "syntree.h"
 #include "intcode.h"
 
 class Instr {
