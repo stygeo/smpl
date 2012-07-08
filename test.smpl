@@ -1,0 +1,5 @@
+a = "test";
+if(a == "test")
+  print "Hello";
+
+a = "test";
