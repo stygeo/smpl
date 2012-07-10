@@ -53,11 +53,12 @@ WSPACE   [ \t]+
 ")"       {return CLOSE_PAR;}
 "{"       {return BEGIN_CS;}
 "}"       {return END_CS;}
+","       {return COMMA;}
 {IDENT}   {identifier();       /* identifier: copy name */
           return ID;}
 {STR}     {string_constant();  /* string constant: copy contents */
           return STRING;}
-"//"      {eat_comment();}     /* Comment:     skip */
+"#"       {eat_comment();}     /* Comment:     skip */
 \n        {lineno++;}          /* newline:     count lines */
 {WSPACE}  {}                    /* whitespace: (do nothing) */
 .         {return ERROR_TOKEN;} /* other char: error, illigal token */

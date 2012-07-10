@@ -1,5 +1,4 @@
-def test() then
-end
+# test
 
 print "Please state your name: ";
 input answer;
@@ -9,11 +8,12 @@ if(answer) then
   print "Since you stated your name, would you like to continue
   answering some questions? (y/n): ";
   input cont;
-  if(cont == "y") {
+  if(cont == "yes") {
     print "Good. How old are you? ";
     input age;
     print age + " is not so old. Very well. I know enough now. good bye";
   } else {
+    print cont;
     print "Ok, I'll quit then";
   }
 end

@@ -24,8 +24,8 @@ void error_summary() {
   printf("%d error(s) were found.\n", errors);
 }
 
-void yyerror(char *msg) {
-  error(msg);
+void yyerror(const char *msg) {
+  error((char*)msg);
 }
 
 // This function is called by the lexer when the end-of-file
@@ -35,8 +35,8 @@ extern "C" int yywrap(void) {
   return 1;
 }
 
-extern SymTab st;
-extern SyntTree tree;
+SymTab st;
+SyntTree tree;
 
 IntInstr *intcode;
 

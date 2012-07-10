@@ -42,7 +42,11 @@ void TreeNode::show(int level)   {
       nl = level + 1;
       printf("\n");
    } else nl = level;
-   for(i = 0; i < children[type]; i++)   child[i]->show(nl);
+
+   for(auto c : child) {
+     c->show(nl);
+   }
+   //for(i = 0; i < children[type]; i++)   child[i]->show(nl);
 }
 
 // Check the semantics of this node

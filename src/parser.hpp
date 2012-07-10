@@ -1,9 +1,8 @@
 /* A Bison parser, made by GNU Bison 2.3.  */
 
-/* Skeleton interface for Bison's Yacc-like parsers in C
+/* Skeleton interface for Bison GLR parsers in C
 
-   Copyright (C) 1984, 1989, 1990, 2000, 2001, 2002, 2003, 2004, 2005, 2006
-   Free Software Foundation, Inc.
+   Copyright (C) 2002, 2003, 2004, 2005, 2006 Free Software Foundation, Inc.
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -55,48 +54,68 @@
      DEF = 271,
      THEN = 272,
      END = 273,
-     ID = 274,
-     STRING = 275
+     COMMA = 274,
+     ID = 275,
+     STRING = 276
    };
 #endif
-/* Tokens.  */
-#define ERROR_TOKEN 258
-#define IF 259
-#define ELSE 260
-#define PRINT 261
-#define INPUT 262
-#define ASSIGN 263
-#define EQUAL 264
-#define CONCAT 265
-#define END_STMT 266
-#define OPEN_PAR 267
-#define CLOSE_PAR 268
-#define BEGIN_CS 269
-#define END_CS 270
-#define DEF 271
-#define THEN 272
-#define END 273
-#define ID 274
-#define STRING 275
 
+
+/* Copy the first part of user declarations.  */
+#line 3 "rules/string.y"
+
+
+#pragma once
+// Includes
+#include <string.h>
+
+#include "lex.h"     // the lexer
+#include "symtab.h"  // the symbol table
+#include "syntree.h" // the syntax tree
+
+extern SymTab st;
+extern SyntTree tree;
+
+// Yacc (bison) defines
+#define YYDEBUG 1       // Generate debug code; needed for YYERROR_VERBOSE
+#define YYERROR_VERBOSE // Give more specific parse error messages
+
+// Error-reporting function must be defined by the caller
+void error(char *format, ...);
+// Forward references
+void yyerror(const char *msg);
+char *make_name();
 
 
 
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
-typedef union YYSTYPE
-#line 31 "rules/string.y"
+typedef union YYSTYPE 
+#line 32 "rules/string.y"
 {
   char     *str;     // a char string
   SymDesc  *symbol;  // entry from symbol table
   TreeNode *tnode;   // node in the syntax tree
 }
-/* Line 1529 of yacc.c.  */
-#line 95 "src/parser.hpp"
+/* Line 2616 of glr.c.  */
+#line 101 "src/parser.hpp"
 	YYSTYPE;
-# define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1
 # define YYSTYPE_IS_TRIVIAL 1
 #endif
 
+#if ! defined YYLTYPE && ! defined YYLTYPE_IS_DECLARED
+typedef struct YYLTYPE
+{
+
+  char yydummy;
+
+} YYLTYPE;
+# define YYLTYPE_IS_DECLARED 1
+# define YYLTYPE_IS_TRIVIAL 1
+#endif
+
+
 extern YYSTYPE yylval;
+
+
 

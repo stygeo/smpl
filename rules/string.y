@@ -2,6 +2,7 @@
 
 %{
 
+#pragma once
 // Includes
 #include <string.h>
 
@@ -9,8 +10,8 @@
 #include "symtab.h"  // the symbol table
 #include "syntree.h" // the syntax tree
 
-SymTab st;
-SyntTree tree;
+extern SymTab st;
+extern SyntTree tree;
 
 // Yacc (bison) defines
 #define YYDEBUG 1       // Generate debug code; needed for YYERROR_VERBOSE
@@ -19,11 +20,11 @@ SyntTree tree;
 // Error-reporting function must be defined by the caller
 void error(char *format, ...);
 // Forward references
-void yyerror(char *msg);
+void yyerror(const char *msg);
 char *make_name();
 
 %}
-
+%glr-parser
 /* -----------------------------------
    Yacc declarations
    -----------------------------------*/
@@ -37,7 +38,7 @@ char *make_name();
 /* Token definitions */
 %token ERROR_TOKEN IF ELSE PRINT INPUT ASSIGN EQUAL
 %token CONCAT END_STMT OPEN_PAR CLOSE_PAR
-%token BEGIN_CS END_CS DEF THEN END
+%token BEGIN_CS END_CS DEF THEN END COMMA
 %token <str> ID STRING
 
 /* Rule type definitions */
@@ -45,10 +46,11 @@ char *make_name();
 %type <tnode>  program statement_list statement function_definition
 %type <tnode>  if_statement optional_else_statement compound_statement
 %type <tnode>  expression equal_expression assign_expression
-%type <tnode>  concat_expression simple_expression
+%type <tnode>  concat_expression simple_expression args
 
 %expect 1 /* shift/reduce conflict: dangling ELSE */
           /* declaration */
+%expect-rr 1
 
 %%
 
@@ -70,14 +72,29 @@ statement
       | expression END_STMT         {$$ = new TreeNode(EXPR_STMT, $1);}
       | PRINT expression END_STMT   {$$ = new TreeNode(PRINT_STMT, $2);}
       | INPUT identifier END_STMT   {$$ = new TreeNode(INPUT_STMT); $$->symbol = $2;}
-      | function_definition         {$$ = new TreeNode(EMPTY_STMT);}
+      | function_definition         {$$ = $1;}
+      | args                        {$$ = $1;}
       | if_statement                {$$ = $1;}
       | compound_statement          {$$ = $1;}
       | error END_STMT              {$$ = new TreeNode(ERROR_STMT);}
       ;
 function_definition
-      : DEF identifier OPEN_PAR CLOSE_PAR statement
-        {}
+      : DEF identifier OPEN_PAR args CLOSE_PAR statement
+        {$$ = new TreeNode(FUNC_STMT, $4, $6);}
+      ;
+args
+      : identifier
+        {
+          printf("identifier: %s", $1);
+          $$ = new TreeNode(ASSIGN_EXPR); $$->symbol = $1;
+        }
+      | args COMMA identifier
+        {
+          printf("identifier mult: %s", $3);
+          TreeNode *t = new TreeNode(ASSIGN_EXPR); t->symbol = $3;
+          $1->append(t);
+          $$ = $1;
+        }
       ;
 
 /* NOTE: This rule causes an unresolvable shift/reduce conflict;
